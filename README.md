@@ -1,6 +1,6 @@
 # terraform-nutanix-virtualmachine
 
-A terraform module to create a managed Kubernetes cluster on Nutanix. Available
+A terraform module to create one or more virtual machines  on Nutanix. Available
 through the [Terraform registry](https://registry.terraform.io/modules/terraform-nutanix-virtualmachine).
 
 ## Usage example
