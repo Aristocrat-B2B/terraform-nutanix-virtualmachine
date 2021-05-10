@@ -1,4 +1,24 @@
 # required variables
+variable "os_type" {
+  type = string
+}
+
+variable "admin_ssh_publickey" {
+  type = string
+}
+
+variable "domain_name" {
+  type = string
+}
+
+variable "local_admin_secret" {
+  type = string
+}
+
+variable "local_admin_username" {
+  type = string
+}
+
 variable "nutanix_cluster_name" {
   type        = string
   description = "The name of the nutanix cluster"

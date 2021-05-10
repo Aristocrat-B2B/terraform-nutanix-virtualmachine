@@ -10,6 +10,10 @@ data "nutanix_image" "image_data" {
   image_name = var.image_name
 }
 
+data "nutanix_project" "project" {
+  project_id = var.project_id
+}
+
 resource "nutanix_virtual_machine" "vm" {
   count        = length(var.vm_name)
   name         = var.vm_name[count.index]
@@ -52,16 +56,24 @@ resource "nutanix_virtual_machine" "vm" {
       }
     }
   }
-  provisioner "remote-exec" {
-    inline = [
-      "echo '${var.ssh_password}' | sudo -S sed -i '1 s_$_ ${var.vm_name[count.index]}_' /etc/hosts 2>/dev/null",
-      "echo '${var.ssh_password}' | sudo -S hostnamectl set-hostname ${var.vm_name[count.index]}",
-    ]
-    connection {
-      type     = "ssh"
-      user     = var.ssh_user
-      password = var.ssh_password
-      host     = self.nic_list_status.0["ip_endpoint_list"].0["ip"]
-    }
-  }
+  guest_customization_cloud_init_user_data = base64encode(<<-EOT
+#cloud-config
+hostname: ${var.vm_name[count.index]}
+fqdn: ${var.vm_name[count.index]}.${var.domain_name}
+ssh_pwauth: 1
+chpasswd:
+  list: |
+    ${var.local_admin_username}:${var.local_admin_secret}
+  expire: false
+users:
+  - name: ${var.local_admin_username}
+    gecos: CEE ${var.local_admin_username} Account
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    primary_group: ${var.local_admin_username}
+    groups: ${var.local_admin_username}
+    ssh-authorized-keys:
+      - ${var.admin_ssh_publickey}
+final_message: "The system is finally up, after $UPTIME seconds"
+EOT
+)
 }
