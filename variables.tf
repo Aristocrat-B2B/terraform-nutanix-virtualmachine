@@ -21,6 +21,18 @@ variable "image_name" {
 
 
 # Optional Variables
+variable "os_type" {
+  type        = string
+  description = "Either linux or windows"
+  default     = "linux"
+}
+
+variable "auto_sethostname" {
+  type        = bool
+  description = "Should we automatically generate a hostname based on var.vm_name"
+  default     = true
+}
+
 variable "vm_name" {
   type        = list(string)
   description = "List of virtual machine names"
@@ -79,4 +91,16 @@ variable "static_ip_enabled" {
   type        = bool
   description = "Assign static IP or DHCP assigned IP"
   default     = false
+}
+
+variable "cfn_init_user_data" {
+  type        = string
+  description = "Yaml formatted cfn_init user_data"
+  default     = ""
+}
+
+variable "sysprep_user_data" {
+  type        = map(any)
+  description = "Sysprep formated user_data"
+  default     = {}
 }
