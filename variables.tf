@@ -9,18 +9,18 @@ variable "subnet_name" {
   description = "The name of the nutanix subnet to deploy into"
 }
 
-variable "project_id" {
-  type        = string
-  description = "Project UUID"
-}
-
 variable "image_name" {
   type        = string
   description = "Name of the uploaded image to use for the VM"
 }
 
-
 # Optional Variables
+variable "project_id" {
+  type        = string
+  description = "Project UUID - set to empty to use default project"
+  default     = ""
+}
+
 variable "os_type" {
   type        = string
   description = "Either linux or windows"

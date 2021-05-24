@@ -1,3 +1,12 @@
+locals {
+
+  project_reference = var.project_id != "" ? {
+    kind = "project"
+    uuid = var.project_id
+  } : {}
+}
+
+
 data "nutanix_subnet" "subnet" {
   subnet_name = var.subnet_name
 }
@@ -19,10 +28,7 @@ resource "nutanix_virtual_machine" "vm-linux" {
   num_sockets          = var.cpu["num_sockets"]
   memory_size_mib      = var.vm_memory
 
-  project_reference = {
-    kind = "project"
-    uuid = var.project_id
-  }
+  project_reference = local.project_reference
 
   disk_list {
     data_source_reference = {
@@ -55,6 +61,10 @@ resource "nutanix_virtual_machine" "vm-linux" {
   }
 
   guest_customization_cloud_init_user_data = base64encode(var.cfn_init_user_data)
+
+  lifecycle {
+    ignore_changes = [owner_reference, project_reference]
+  }
 }
 
 resource "null_resource" "remote-exec-linux" {
