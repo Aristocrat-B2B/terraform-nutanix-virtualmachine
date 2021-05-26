@@ -85,6 +85,7 @@ create_virtualmachine = false
   project_id        = "abcde-12345"
   ssh_user = "admin"
   ssh_password = "ItsASecret!"
+  project_name = "production"
 }
 
 ```

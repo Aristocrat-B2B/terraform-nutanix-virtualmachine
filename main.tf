@@ -1,11 +1,14 @@
 locals {
-
-  project_reference = var.project_id != "" ? {
+  projects   = zipmap(data.nutanix_projects.projects.entities.*.name, data.nutanix_projects.projects.entities.*.metadata.uuid)
+  project_id = var.project_name != "" ? local.projects["${var.project_name}"] : var.project_id
+  project_reference = var.project_name != "" || local.project_id != "" ? {
     kind = "project"
-    uuid = var.project_id
+    uuid = local.project_id
   } : {}
 }
 
+data "nutanix_projects" "projects" {
+}
 
 data "nutanix_subnet" "subnet" {
   subnet_name = var.subnet_name
@@ -95,7 +98,7 @@ resource "nutanix_virtual_machine" "vm-windows" {
 
   project_reference = {
     kind = "project"
-    uuid = var.project_id
+    uuid = local.project_id
   }
 
   disk_list {

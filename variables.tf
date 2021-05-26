@@ -15,11 +15,19 @@ variable "image_name" {
 }
 
 # Optional Variables
-variable "project_id" {
+variable "project_name" {
   type        = string
-  description = "Project UUID - set to empty to use default project"
+  description = "Project name - set to empty to use default project"
   default     = ""
 }
+
+# Optional Variables
+variable "project_id" {
+  type        = string
+  description = "Project id - set to empty to use default project"
+  default     = ""
+}
+
 
 variable "os_type" {
   type        = string
