@@ -8,6 +8,12 @@ project adheres to [Semantic Versioning](http://semver.org/).
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.0.4"></a>
+## [v1.0.4] - 2021-05-28
+
+Added
+-  Output to create a map of hostnames(keys) and IPs(values)
+
 <a name="v1.0.3"></a>
 ## [v1.0.3] - 2021-05-25
 
