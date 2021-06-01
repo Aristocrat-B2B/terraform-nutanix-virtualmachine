@@ -8,6 +8,12 @@ project adheres to [Semantic Versioning](http://semver.org/).
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.0.5"></a>
+## [v1.0.5] - 2021-05-29
+
+Added
+-  Support for vm_name output
+
 <a name="v1.0.4"></a>
 ## [v1.0.4] - 2021-05-28
 
