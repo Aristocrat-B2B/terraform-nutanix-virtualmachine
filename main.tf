@@ -1,6 +1,6 @@
 locals {
   projects   = zipmap(data.nutanix_projects.projects.entities.*.name, data.nutanix_projects.projects.entities.*.metadata.uuid)
-  project_id = var.project_name != "" ? local.projects["${var.project_name}"] : var.project_id
+  project_id = var.project_name != "" ? local.projects[var.project_name] : var.project_id
   project_reference = var.project_name != "" || local.project_id != "" ? {
     kind = "project"
     uuid = local.project_id
