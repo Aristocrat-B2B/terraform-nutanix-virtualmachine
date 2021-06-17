@@ -10,7 +10,7 @@ output "project_id" {
 
 output "host_inventory" {
   description = "Map of host and IPs"
-  value       = zipmap(var.vm_name, [for ip in nutanix_virtual_machine.vm-linux[*].nic_list_status : ip.0["ip_endpoint_list"].0["ip"]])
+  value       = zipmap(var.vm_name, coalescelist([for ip in nutanix_virtual_machine.vm-linux[*].nic_list_status : ip.0["ip_endpoint_list"].0["ip"]], [for ip in nutanix_virtual_machine.vm-windows[*].nic_list_status : ip.0["ip_endpoint_list"].0["ip"]]))
 }
 
 output "vms" {
