@@ -28,6 +28,11 @@ variable "project_id" {
   default     = ""
 }
 
+variable "additional_nic_subnet_names" {
+  type        = list(any)
+  description = "A list of subnet names that should be used to add additional NICs from"
+  default     = []
+}
 
 variable "os_type" {
   type        = string

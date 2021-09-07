@@ -5,6 +5,9 @@ locals {
     kind = "project"
     uuid = local.project_id
   } : {}
+  additional_subnets = length(var.additional_nic_subnet_names) > 0 ? { for subnet in var.additional_nic_subnet_names :
+    "subnet_${subnet}" => subnet
+  } : {}
 }
 
 data "nutanix_projects" "projects" {
@@ -12,6 +15,11 @@ data "nutanix_projects" "projects" {
 
 data "nutanix_subnet" "subnet" {
   subnet_name = var.subnet_name
+}
+
+data "nutanix_subnet" "additional_subnets" {
+  count       = length(var.additional_nic_subnet_names)
+  subnet_name = var.additional_nic_subnet_names[count.index]
 }
 
 data "nutanix_cluster" "cluster" {
@@ -60,6 +68,13 @@ resource "nutanix_virtual_machine" "vm-linux" {
         ip   = var.ip_address[count.index]
         type = "ASSIGNED"
       }
+    }
+  }
+
+  dynamic "nic_list" {
+    for_each = length(var.additional_nic_subnet_names) > 0 ? local.additional_subnets : {}
+    content {
+      subnet_uuid = data.nutanix_subnet.additional_subnets[index(var.additional_nic_subnet_names, nic_list.value)].metadata.uuid
     }
   }
 
