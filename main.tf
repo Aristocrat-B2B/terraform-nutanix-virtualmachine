@@ -135,6 +135,7 @@ resource "nutanix_virtual_machine" "vm-windows" {
       disk_size_mib = disk_list.value
     }
   }
+
   nic_list {
     subnet_uuid = data.nutanix_subnet.subnet.metadata.uuid
     dynamic "ip_endpoint_list" {
@@ -143,6 +144,13 @@ resource "nutanix_virtual_machine" "vm-windows" {
         ip   = var.ip_address[count.index]
         type = "ASSIGNED"
       }
+    }
+  }
+
+  dynamic "nic_list" {
+    for_each = length(var.additional_nic_subnet_names) > 0 ? local.additional_subnets : {}
+    content {
+      subnet_uuid = data.nutanix_subnet.additional_subnets[index(var.additional_nic_subnet_names, nic_list.value)].metadata.uuid
     }
   }
 
