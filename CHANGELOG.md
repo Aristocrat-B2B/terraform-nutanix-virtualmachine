@@ -9,7 +9,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 <a name="v1.0.8"></a>
-## [v1.0.7] - 2021-09-06
+## [v1.0.8] - 2021-09-06
 
 Changed
 - Windows servers now support additional optional network interfaces
