@@ -17,3 +17,8 @@ output "vms" {
   description = "List of VMs"
   value       = var.vm_name
 }
+
+output "creation_time" {
+  description = "Creation time of VM"
+  value       = join(",", coalescelist(nutanix_virtual_machine.vm-linux[*].creation_time, nutanix_virtual_machine.vm-windows[*].creation_time))
+}
