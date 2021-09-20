@@ -88,6 +88,10 @@ resource "nutanix_virtual_machine" "vm-linux" {
 resource "null_resource" "remote-exec-linux" {
   count = var.auto_sethostname && var.os_type == "linux" ? length(var.vm_name) : 0
 
+  triggers = {
+    vm = nutanix_virtual_machine.vm-linux[count.index].metadata.creation_time
+  }
+
   provisioner "remote-exec" {
     inline = [
       "echo '${var.ssh_password}' | sudo -S sed -i '1 s_$_ ${var.vm_name[count.index]}_' /etc/hosts 2>/dev/null",
