@@ -37,7 +37,7 @@ module "vm_create" {
     "num_vcpus_per_socket" : 2,
     "num_sockets" : 2
   }
-  additinal_disk_enabled = true
+  additional_disk_enabled = true
   additional_disk_list = {
     disk1 = 10240,
     disk2 = 16000

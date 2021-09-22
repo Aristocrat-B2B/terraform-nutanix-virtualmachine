@@ -89,7 +89,7 @@ resource "null_resource" "remote-exec-linux" {
   count = var.auto_sethostname && var.os_type == "linux" ? length(var.vm_name) : 0
 
   triggers = {
-    vm = nutanix_virtual_machine.vm-linux[count.index].metadata.creation_time
+    vm = nutanix_virtual_machine.vm-linux[count.index].uuid
   }
 
   provisioner "remote-exec" {
