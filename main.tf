@@ -85,7 +85,7 @@ resource "nutanix_virtual_machine" "vm-linux" {
   }
 }
 
-resource "null_resource" "remote-exec-linux" {
+resource "null_resource" "set-linux-hostname" {
   count = var.auto_sethostname && var.os_type == "linux" ? length(var.vm_name) : 0
 
   triggers = {
@@ -115,10 +115,7 @@ resource "nutanix_virtual_machine" "vm-windows" {
   num_sockets          = var.cpu["num_sockets"]
   memory_size_mib      = var.vm_memory
 
-  project_reference = {
-    kind = "project"
-    uuid = local.project_id
-  }
+  project_reference = local.project_reference
 
   disk_list {
     data_source_reference = {
@@ -156,6 +153,10 @@ resource "nutanix_virtual_machine" "vm-windows" {
     content {
       subnet_uuid = data.nutanix_subnet.additional_subnets[index(var.additional_nic_subnet_names, nic_list.value)].metadata.uuid
     }
+  }
+
+  lifecycle {
+    ignore_changes = [owner_reference, project_reference]
   }
 
   guest_customization_sysprep = var.sysprep_user_data
