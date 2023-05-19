@@ -9,16 +9,24 @@ output "project_id" {
 }
 
 output "host_inventory" {
-  description = "Map of host and IPs"
-  value       = zipmap(var.vm_name, coalescelist([for ip in nutanix_virtual_machine.vm-linux[*].nic_list_status : ip.0["ip_endpoint_list"].0["ip"]], [for ip in nutanix_virtual_machine.vm-windows[*].nic_list_status : ip.0["ip_endpoint_list"].0["ip"]]))
-}
-
-output "vms" {
-  description = "List of VMs"
-  value       = var.vm_name
-}
-
-output "creation_time" {
-  description = "Creation time of VM"
-  value       = join(",", coalescelist(nutanix_virtual_machine.vm-linux[*].metadata.creation_time, nutanix_virtual_machine.vm-windows[*].metadata.creation_time))
+  description = "Map of hosts and their metadata"
+  value = zipmap(
+    var.vm_name,
+    coalescelist(
+      [for vm in nutanix_virtual_machine.vm-linux[*] :
+        {
+          id            = vm.metadata.uuid
+          ip            = vm.nic_list_status.0["ip_endpoint_list"].0["ip"]
+          creation_time = vm.metadata.creation_time
+        }
+      ],
+      [for vm in nutanix_virtual_machine.vm-windows[*] :
+        {
+          id            = vm.metadata.uuid
+          ip            = vm.nic_list_status.0["ip_endpoint_list"].0["ip"]
+          creation_time = vm.metadata.creation_time
+        }
+      ]
+    )
+  )
 }

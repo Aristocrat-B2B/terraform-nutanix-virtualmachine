@@ -5,8 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this
 project adheres to [Semantic Versioning](http://semver.org/).
 
-<a name="unreleased"></a>
-## [Unreleased]
+<a name="v2.0.0"></a>
+## [v2.0.0] - 2023-05-19
+Changed
+- Deleted outputs:
+  - `creation_time` - moved these data to `host_inventory`
+  - `vms` - it is meaningless as it contained `var.vm_name`
+  - `nic_list` - its content can be obtained from `host_inventory`
+- Changed outputs:
+  - `host_inventory` - changed structure to
+```
+{
+  host_name = {
+    ip = 1.2.3.4
+    id = "vm id"
+  }
+  ...
+}
+```
 
 <a name="v1.0.9"></a>
 ## [v1.0.9] - 2021-09-06
